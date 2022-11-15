@@ -143,3 +143,12 @@ kubectl create secret generic counter-postgresadmin \
     --from-literal=pgadmin-default-email=admin@admin.com \
     --from-literal=pgadmin-default-password=root \
 ```
+
+# Config
+
+## Counter Postgresadmin
+
+```
+kubectl create configmap counter-postgresadmin \
+--from-literal=pgadmin-listen-port=8080
+```

@@ -20,7 +20,7 @@ spec:
         - name: counter-postgresadmin
           image: quay.io/sticen/pgadmin4
           ports:
-            - containerPort: 80
+            - containerPort: 8080
           env:
             - name: PGADMIN_DEFAULT_EMAIL
               valueFrom:
@@ -32,21 +32,24 @@ spec:
                 secretKeyRef:
                   name: counter-postgresadmin
                   key: pgadmin-default-password
+            - name: PGADMIN_LISTEN_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: counter-postgresadmin
+                  key: pgadmin-listen-port
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: counter-postgresadmin
-  labels:
-    app: counter-postgresadmin
 spec:
-  type: NodePort
-  ports:
-    - port: 80
-      targetPort: 80-tcp
-      nodePort: 30080
   selector:
     app: counter-postgresadmin
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
@@ -56,7 +59,7 @@ metadata:
   name: counter-postgresadmin
 spec:
   port:
-    targetPort: 80-tcp
+    targetPort: 8080-tcp
   to:
     kind: Service
     name: counter-postgresadmin
