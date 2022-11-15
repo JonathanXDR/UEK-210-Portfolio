@@ -34,17 +34,17 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: counter-database
-                  key: database-user
+                  key: database-name
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
                   name: counter-database
-                  key: database-password
+                  key: database-user
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: counter-database
-                  key: database-name
+                  key: database-password
 ---
 # Das Deployment muss die Konfiguration für die Datenbankverbindung beinhalten. Verwenden Sie dazu das bereits erstellte Secret von counter-database und eine neue ConfigMap für die Umgebungsvariable DB_HOST.
 apiVersion: v1
