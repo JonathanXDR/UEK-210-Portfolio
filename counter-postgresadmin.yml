@@ -1,10 +1,11 @@
 # Erstellen Sie mindestens einen weiteres Deployment mit dem Namen counter-postgresadmin.
 # Verwenden Sie als Image quay.io/sticen/pgadmin4.
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: counter-postgresadmin
+  labels:
+    app: counter-postgresadmin
 spec:
   replicas: 1
   selector:
@@ -20,3 +21,45 @@ spec:
           image: quay.io/sticen/pgadmin4
           ports:
             - containerPort: 80
+          env:
+            - name: PGADMIN_DEFAULT_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: counter-postgresadmin
+                  key: pgadmin-default-email
+            - name: PGADMIN_DEFAULT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: counter-postgresadmin
+                  key: pgadmin-default-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: counter-postgresadmin
+  labels:
+    app: counter-postgresadmin
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80-tcp
+      nodePort: 30080
+  selector:
+    app: counter-postgresadmin
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: counter-postgresadmin
+  name: counter-postgresadmin
+spec:
+  port:
+    targetPort: 80-tcp
+  to:
+    kind: Service
+    name: counter-postgresadmin
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge

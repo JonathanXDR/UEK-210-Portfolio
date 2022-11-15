@@ -127,9 +127,19 @@ oc get all -o yaml > project.yml
 
 # Secret
 
+## Counter Database
+
 ```
 kubectl create secret generic counter-database \
     --from-literal=database-name=counter-database \
     --from-literal=database-user=counter-database \
     --from-literal=database-password='S!B\*d$zDsb='
+```
+
+## Counter Postgresadmin
+
+```
+kubectl create secret generic counter-postgresadmin \
+    --from-literal=pgadmin-default-email=admin@admin.com \
+    --from-literal=pgadmin-default-password=root \
 ```
