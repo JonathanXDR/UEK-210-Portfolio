@@ -1,0 +1,66 @@
+# Erstellen Sie ein weiteres Deployment im mit der Bezeichnung app=counter-frontend welches einen Pod in Betrieb hat. Als Image soll counter-frontend verwendet werden.
+# Das Deployment muss die Konfiguration für die Backendverbindung beinhalten. Erstellen Sie dafür eine neue ConfigMap für den REACT_APP_BACKEND_URL und dem URL der Backends (siehe Route des Backends).
+# Das Deployment counter-frontend darf dabei nicht mit Image-Tag latest laufen.
+# Erstellen Sie einen Service mit dem Namen counter-frontend.
+
+name: counter-frontend
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: counter-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: counter-frontend
+  template:
+    metadata:
+      labels:
+        app: counter-frontend
+    spec:
+      containers:
+        - name: counter-frontend
+          image: docker.io/openshift/hello-openshift
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: REACT_APP_BACKEND_URL
+              value: counter-backend
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: counter-backend
+data:
+  REACT_APP_BACKEND_URL: http://counter-backend:8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: counter-frontend
+spec:
+  selector:
+    app: counter-frontend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+# Stellen Sie sicher, dass die Route des counter-frontend von http auf https umleitet.
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: counter-frontend
+spec:
+  host: counter-frontend.apps.cluster-1b1b.1b1b.example.opentlc.com
+  port:
+    targetPort: 8080
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: counter-frontend
+    weight: 100
+  wildcardPolicy: None

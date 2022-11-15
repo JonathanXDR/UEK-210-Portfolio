@@ -1,0 +1,90 @@
+# Erstellen Sie ein Deployment mit dem Label app=counter-backend welches das erstellte Image in einem Pod in Betrieb nimmt.
+# Das Deployment counter-backend darf dabei nicht mit Image-Tag latest laufen.
+name: counter-backend
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: counter-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: counter-backend
+  template:
+    metadata:
+      labels:
+        app: counter-backend
+    spec:
+      containers:
+        - name: counter-backend
+          image: docker.io/openshift/hello-openshift
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: counter-database
+                  key: database-user
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: counter-database
+                  key: database-password
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: counter-database
+                  key: database-name
+            - name: POSTGRESQL_SERVICE_HOST
+              value: counter-database
+            - name: POSTGRESQL_SERVICE_PORT
+              value: '5432'
+---
+# Das Deployment muss die Konfiguration für die Datenbankverbindung beinhalten. Verwenden Sie dazu das bereits erstellte Secret von counter-database und eine neue ConfigMap für die Umgebungsvariable DB_HOST.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: counter-database
+type: Opaque
+data:
+  database-name: Y291bnRlcg==
+  database-user: Y291bnRlcg==
+  database-password: Y291bnRlcg==
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: counter-backend
+data:
+  DB_HOST: counter-database
+---
+# Erstellen Sie einen Service mit dem Namen counter-backend, welcher mit dem Backend-Pod interagiert.
+apiVersion: v1
+kind: Service
+metadata:
+  name: counter-backend
+spec:
+  selector:
+    app: counter-backend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+# Erstellen Sie eine Route für den Service counter-backend.
+# Stellen Sie sicher, dass die Route des counter-backend von http auf https umleitet.
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: counter-backend
+spec:
+  host: counter-backend.apps.cluster-1b1b.1b1b.example.opentlc.com
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+---
+

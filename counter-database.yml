@@ -1,0 +1,62 @@
+# Erstellen Sie ein Secret mit dem Namen "counter-database", und den keys "database-name", "database-user" und "database-password".
+# Erstellen Sie eine Postgres-Datenbank mit einem Deployment.
+# Erstellen Sie einen Service, welcher als "counter-database" ansprechbar ist.
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: counter-database
+type: Opaque
+data:
+  database-name: Y291bnRlcg==
+  database-user: Y291bnRlcg==
+  database-password: Y291bnRlcg==
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: counter-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: counter-database
+  template:
+    metadata:
+      labels:
+        app: counter-database
+    spec:
+      containers:
+        - name: counter-database
+          image: centos/postgresql-95-centos7
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: counter-database
+                  key: database-user
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: counter-database
+                  key: database-password
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: counter-database
+                  key: database-name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: counter-database
+spec:
+  selector:
+    app: counter-database
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
