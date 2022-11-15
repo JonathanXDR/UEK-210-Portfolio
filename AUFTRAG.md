@@ -124,3 +124,12 @@ Exportieren Sie die Applikation, erstellen Sie ein ZIP der beiden Files und lade
 oc get all > overview.txt
 oc get all -o yaml > project.yml
 ```
+
+# Secret
+
+```
+kubectl create secret generic counter-database \
+    --from-literal=database-name=counter-database \
+    --from-literal=database-user=counter-database \
+    --from-literal=database-password='S!B\*d$zDsb='
+```
