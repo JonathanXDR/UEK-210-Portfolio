@@ -2,8 +2,8 @@
 # Erstellen Sie eine Postgres-Datenbank mit einem Deployment.
 # Erstellen Sie einen Service, welcher als "counter-database" ansprechbar ist.
 
-kind: Deployment
 apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: counter-database
 spec:
@@ -48,5 +48,5 @@ spec:
     app: counter-database
   ports:
     - protocol: TCP
-      port: 5432
-      targetPort: 5432
+      port: 8080
+      targetPort: 8080

@@ -1,6 +1,7 @@
 # Erstellen Sie ein Deployment mit dem Label app=counter-backend welches das erstellte Image (ghcr.io/jonathanxdr/counter-backend:v1) in einem Pod in Betrieb nimmt.
 # Das Deployment counter-backend darf dabei nicht mit Image-Tag latest laufen und soll auf dem NODE_ENV production laufen
-apiVersion: v1
+
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: counter-backend
@@ -31,6 +32,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: counter-backend
+  labels:
+    app: counter-backend
 data:
   DB_HOST: counter-database
 ---
