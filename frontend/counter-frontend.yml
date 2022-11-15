@@ -27,6 +27,11 @@ spec:
               value: ./.npm-cache
             - name: NODE_ENV
               value: production
+            - name: BACKEND_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: counter-backend
+                  key: backend_url
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -35,7 +40,7 @@ metadata:
   labels:
     app: counter-backend
 data:
-  REACT_APP_BACKEND_URL: counter-backend-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
+  backend_url: https://counter-backend-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
 ---
 apiVersion: v1
 kind: Service
