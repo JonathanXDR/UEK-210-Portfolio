@@ -29,17 +29,32 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: counter-database
-                  key: DB_HOST
+                  key: db_host
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: counter-database
+                  key: database-user
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: counter-database
+                  key: database-password
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: counter-database
+                  key: database-name
 ---
 # Das Deployment muss die Konfiguration für die Datenbankverbindung beinhalten. Verwenden Sie dazu das bereits erstellte Secret von counter-database und eine neue ConfigMap für die Umgebungsvariable DB_HOST.
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: counter-backend
+  name: counter-database
   labels:
-    app: counter-backend
+    app: counter-database
 data:
-  DB_HOST: counter-database
+  db_host: counter-database
 ---
 # Erstellen Sie einen Service mit dem Namen counter-backend, welcher mit dem Backend-Pod interagiert.
 apiVersion: v1

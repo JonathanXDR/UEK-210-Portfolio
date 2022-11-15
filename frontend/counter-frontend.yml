@@ -35,7 +35,7 @@ metadata:
   labels:
     app: counter-backend
 data:
-  REACT_APP_BACKEND_URL: http://counter-backend:8080
+  REACT_APP_BACKEND_URL: counter-backend-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
 ---
 apiVersion: v1
 kind: Service
