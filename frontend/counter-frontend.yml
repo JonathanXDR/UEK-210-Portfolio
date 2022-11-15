@@ -1,11 +1,10 @@
 # Erstellen Sie ein weiteres Deployment im mit der Bezeichnung app=counter-frontend welches einen Pod in Betrieb hat. Als Image soll counter-frontend verwendet werden.
 # Das Deployment muss die Konfiguration für die Backendverbindung beinhalten. Erstellen Sie dafür eine neue ConfigMap für den REACT_APP_BACKEND_URL und dem URL der Backends (siehe Route des Backends).
-# Das Deployment counter-frontend darf dabei nicht mit Image-Tag latest laufen.
+# Das Deployment counter-frontend darf dabei nicht mit Image-Tag latest laufen und soll auf dem NODE_ENV production laufen
 # Erstellen Sie einen Service mit dem Namen counter-frontend.
 
-name: counter-frontend
+apiVersion: v1
 kind: Deployment
-apiVersion: apps/v1
 metadata:
   name: counter-frontend
 spec:
@@ -20,13 +19,15 @@ spec:
     spec:
       containers:
         - name: counter-frontend
-          image: docker.io/openshift/hello-openshift
+          image: ghcr.io/jonathanxdr/counter-frontend:v1
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - containerPort: 3000
           env:
-            - name: REACT_APP_BACKEND_URL
-              value: counter-backend
+            - name: npm_config_cache
+              value: ./.npm-cache
+            - name: NODE_ENV
+              value: production
 ---
 apiVersion: v1
 kind: ConfigMap
