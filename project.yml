@@ -1,0 +1,4262 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      k8s.v1.cni.cncf.io/network-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.10.35"
+            ],
+            "mac": "86:bb:c1:c9:fc:53",
+            "default": true,
+            "dns": {}
+        }]
+      k8s.v1.cni.cncf.io/networks-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.10.35"
+            ],
+            "mac": "86:bb:c1:c9:fc:53",
+            "default": true,
+            "dns": {}
+        }]
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, ephemeral-storage,
+        memory request for container counter-backend; cpu, memory limit for container
+        counter-backend'
+      openshift.io/scc: restricted
+    creationTimestamp: "2022-11-15T13:22:10Z"
+    generateName: counter-backend-d978d4ff-
+    labels:
+      app: counter-backend
+      pod-template-hash: d978d4ff
+    name: counter-backend-d978d4ff-f6gdl
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: counter-backend-d978d4ff
+      uid: dfc22674-fd60-43bb-8b73-adb702a6aaea
+    resourceVersion: "582097872"
+    uid: bdbdb0ce-408c-4910-8c2f-219765645ae9
+  spec:
+    containers:
+    - env:
+      - name: npm_config_cache
+        value: ./.npm-cache
+      - name: NODE_ENV
+        value: production
+      - name: DB_HOST
+        valueFrom:
+          configMapKeyRef:
+            key: db_host
+            name: counter-database
+      - name: DB_NAME
+        valueFrom:
+          secretKeyRef:
+            key: database-name
+            name: counter-database
+      - name: DB_USER
+        valueFrom:
+          secretKeyRef:
+            key: database-user
+            name: counter-database
+      - name: DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: database-password
+            name: counter-database
+      image: ghcr.io/jonathanxdr/counter-backend:v1
+      imagePullPolicy: IfNotPresent
+      name: counter-backend
+      ports:
+      - containerPort: 8080
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 600m
+          memory: 768Mi
+        requests:
+          cpu: 10m
+          ephemeral-storage: 100Ki
+          memory: 100Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1001170000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-fzlxd
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    imagePullSecrets:
+    - name: default-dockercfg-fchpn
+    - name: ghcr
+    nodeName: worker-175e
+    nodeSelector:
+      node-role.kubernetes.io/app: ""
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1001170000
+      seLinuxOptions:
+        level: s0:c34,c24
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: kube-api-access-fzlxd
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+        - configMap:
+            items:
+            - key: service-ca.crt
+              path: service-ca.crt
+            name: openshift-service-ca.crt
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:22:10Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:22:12Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:22:12Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:22:10Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: cri-o://f4c6cff55e5d7fde49035e4688acd1cb99b9f8640a1e9579e8f38048adfd9cd1
+      image: ghcr.io/jonathanxdr/counter-backend:v1
+      imageID: ghcr.io/jonathanxdr/counter-backend@sha256:e062cb69855a4a53c8f6ad017dc5feb07095efe6786d1cb6484f48d5a6a7424b
+      lastState: {}
+      name: counter-backend
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2022-11-15T13:22:11Z"
+    hostIP: 85.217.160.230
+    phase: Running
+    podIP: 10.0.10.35
+    podIPs:
+    - ip: 10.0.10.35
+    qosClass: Burstable
+    startTime: "2022-11-15T13:22:10Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      k8s.v1.cni.cncf.io/network-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.9.193"
+            ],
+            "mac": "a2:86:82:df:66:b3",
+            "default": true,
+            "dns": {}
+        }]
+      k8s.v1.cni.cncf.io/networks-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.9.193"
+            ],
+            "mac": "a2:86:82:df:66:b3",
+            "default": true,
+            "dns": {}
+        }]
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, ephemeral-storage,
+        memory request for container counter-backend; cpu, memory limit for container
+        counter-backend'
+      openshift.io/scc: restricted
+    creationTimestamp: "2022-11-15T13:22:26Z"
+    generateName: counter-backend-d978d4ff-
+    labels:
+      app: counter-backend
+      pod-template-hash: d978d4ff
+    name: counter-backend-d978d4ff-v6pfk
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: counter-backend-d978d4ff
+      uid: dfc22674-fd60-43bb-8b73-adb702a6aaea
+    resourceVersion: "582098103"
+    uid: 90518c45-499b-46f4-bbcb-cdcd207aaa7d
+  spec:
+    containers:
+    - env:
+      - name: npm_config_cache
+        value: ./.npm-cache
+      - name: NODE_ENV
+        value: production
+      - name: DB_HOST
+        valueFrom:
+          configMapKeyRef:
+            key: db_host
+            name: counter-database
+      - name: DB_NAME
+        valueFrom:
+          secretKeyRef:
+            key: database-name
+            name: counter-database
+      - name: DB_USER
+        valueFrom:
+          secretKeyRef:
+            key: database-user
+            name: counter-database
+      - name: DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: database-password
+            name: counter-database
+      image: ghcr.io/jonathanxdr/counter-backend:v1
+      imagePullPolicy: IfNotPresent
+      name: counter-backend
+      ports:
+      - containerPort: 8080
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 600m
+          memory: 768Mi
+        requests:
+          cpu: 10m
+          ephemeral-storage: 100Ki
+          memory: 100Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1001170000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-jqtm7
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    imagePullSecrets:
+    - name: default-dockercfg-fchpn
+    - name: ghcr
+    nodeName: worker-5e68
+    nodeSelector:
+      node-role.kubernetes.io/app: ""
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1001170000
+      seLinuxOptions:
+        level: s0:c34,c24
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: kube-api-access-jqtm7
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+        - configMap:
+            items:
+            - key: service-ca.crt
+              path: service-ca.crt
+            name: openshift-service-ca.crt
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:22:26Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:22:27Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:22:27Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:22:26Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: cri-o://6035331a43158aefb06fa611c1d5c544751931bdc6ea58e0ef51136c42de3d56
+      image: ghcr.io/jonathanxdr/counter-backend:v1
+      imageID: ghcr.io/jonathanxdr/counter-backend@sha256:e062cb69855a4a53c8f6ad017dc5feb07095efe6786d1cb6484f48d5a6a7424b
+      lastState: {}
+      name: counter-backend
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2022-11-15T13:22:27Z"
+    hostIP: 85.217.160.220
+    phase: Running
+    podIP: 10.0.9.193
+    podIPs:
+    - ip: 10.0.9.193
+    qosClass: Burstable
+    startTime: "2022-11-15T13:22:26Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      k8s.v1.cni.cncf.io/network-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.9.3"
+            ],
+            "mac": "42:ea:7f:2a:91:e5",
+            "default": true,
+            "dns": {}
+        }]
+      k8s.v1.cni.cncf.io/networks-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.9.3"
+            ],
+            "mac": "42:ea:7f:2a:91:e5",
+            "default": true,
+            "dns": {}
+        }]
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, ephemeral-storage,
+        memory request for container counter-database; cpu, memory limit for container
+        counter-database'
+      openshift.io/scc: restricted
+    creationTimestamp: "2022-11-15T10:31:55Z"
+    generateName: counter-database-6d89b78ff9-
+    labels:
+      app: counter-database
+      pod-template-hash: 6d89b78ff9
+    name: counter-database-6d89b78ff9-qp6v6
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: counter-database-6d89b78ff9
+      uid: e27cc28f-2446-455f-a545-651d5efd6dd3
+    resourceVersion: "581881786"
+    uid: 0f0e5721-0ad2-4a95-8558-dcc48f53fd85
+  spec:
+    containers:
+    - env:
+      - name: POSTGRESQL_USER
+        valueFrom:
+          secretKeyRef:
+            key: database-user
+            name: counter-database
+      - name: POSTGRESQL_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: database-password
+            name: counter-database
+      - name: POSTGRESQL_DATABASE
+        valueFrom:
+          secretKeyRef:
+            key: database-name
+            name: counter-database
+      image: quay.io/centos7/postgresql-10-centos7:20221109
+      imagePullPolicy: Always
+      name: counter-database
+      ports:
+      - containerPort: 5432
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 600m
+          memory: 768Mi
+        requests:
+          cpu: 10m
+          ephemeral-storage: 100Ki
+          memory: 100Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1001170000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-wf9xh
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    imagePullSecrets:
+    - name: default-dockercfg-fchpn
+    - name: ghcr
+    nodeName: worker-5e68
+    nodeSelector:
+      node-role.kubernetes.io/app: ""
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1001170000
+      seLinuxOptions:
+        level: s0:c34,c24
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: kube-api-access-wf9xh
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+        - configMap:
+            items:
+            - key: service-ca.crt
+              path: service-ca.crt
+            name: openshift-service-ca.crt
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:31:55Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:32:00Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:32:00Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:31:55Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: cri-o://f01e6d0e634739e32871e23271ef15a8fc397e3aa5c13e5ba57cc3e8fbfcf181
+      image: quay.io/centos7/postgresql-10-centos7:20221109
+      imageID: quay.io/centos7/postgresql-10-centos7@sha256:e4d23ff04ed64531e36064a67903be84ca67a3ee673d099767783fac13d12994
+      lastState: {}
+      name: counter-database
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2022-11-15T10:32:00Z"
+    hostIP: 85.217.160.220
+    phase: Running
+    podIP: 10.0.9.3
+    podIPs:
+    - ip: 10.0.9.3
+    qosClass: Burstable
+    startTime: "2022-11-15T10:31:55Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      k8s.v1.cni.cncf.io/network-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.9.236"
+            ],
+            "mac": "72:df:ee:d3:78:4c",
+            "default": true,
+            "dns": {}
+        }]
+      k8s.v1.cni.cncf.io/networks-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.9.236"
+            ],
+            "mac": "72:df:ee:d3:78:4c",
+            "default": true,
+            "dns": {}
+        }]
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, ephemeral-storage,
+        memory request for container counter-frontend; cpu, memory limit for container
+        counter-frontend'
+      openshift.io/scc: restricted
+    creationTimestamp: "2022-11-15T13:21:57Z"
+    generateName: counter-frontend-d659b97fb-
+    labels:
+      app: counter-frontend
+      pod-template-hash: d659b97fb
+    name: counter-frontend-d659b97fb-l89mr
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: counter-frontend-d659b97fb
+      uid: 41a8f7af-b7fe-4cf4-b7c2-a9cc204bbdea
+    resourceVersion: "582097969"
+    uid: 6cf0e4a3-bb94-4fdc-b997-3b4351321901
+  spec:
+    containers:
+    - env:
+      - name: npm_config_cache
+        value: ./.npm-cache
+      - name: NODE_ENV
+        value: production
+      - name: BACKEND_URL
+        valueFrom:
+          configMapKeyRef:
+            key: backend_url
+            name: counter-backend
+      image: ghcr.io/jonathanxdr/counter-frontend:v1
+      imagePullPolicy: IfNotPresent
+      name: counter-frontend
+      ports:
+      - containerPort: 3000
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 600m
+          memory: 768Mi
+        requests:
+          cpu: 10m
+          ephemeral-storage: 100Ki
+          memory: 100Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1001170000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-4m74v
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    imagePullSecrets:
+    - name: default-dockercfg-fchpn
+    - name: ghcr
+    nodeName: worker-5e68
+    nodeSelector:
+      node-role.kubernetes.io/app: ""
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1001170000
+      seLinuxOptions:
+        level: s0:c34,c24
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: kube-api-access-4m74v
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+        - configMap:
+            items:
+            - key: service-ca.crt
+              path: service-ca.crt
+            name: openshift-service-ca.crt
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:21:57Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:22:19Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:22:19Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:21:57Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: cri-o://98b5a168063aa411f9643bfd9ef003903ce1155dbb07b2b298895e80b99e4584
+      image: ghcr.io/jonathanxdr/counter-frontend:v1
+      imageID: ghcr.io/jonathanxdr/counter-frontend@sha256:4db6f89be439d98bce7aaf893786de586df6c752a4ecb85c278a32cd10768e94
+      lastState: {}
+      name: counter-frontend
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2022-11-15T13:22:19Z"
+    hostIP: 85.217.160.220
+    phase: Running
+    podIP: 10.0.9.236
+    podIPs:
+    - ip: 10.0.9.236
+    qosClass: Burstable
+    startTime: "2022-11-15T13:21:57Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      k8s.v1.cni.cncf.io/network-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.10.252"
+            ],
+            "mac": "72:5c:9a:3a:03:85",
+            "default": true,
+            "dns": {}
+        }]
+      k8s.v1.cni.cncf.io/networks-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.10.252"
+            ],
+            "mac": "72:5c:9a:3a:03:85",
+            "default": true,
+            "dns": {}
+        }]
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, ephemeral-storage,
+        memory request for container counter-frontend; cpu, memory limit for container
+        counter-frontend'
+      openshift.io/scc: restricted
+    creationTimestamp: "2022-11-15T13:21:41Z"
+    generateName: counter-frontend-d659b97fb-
+    labels:
+      app: counter-frontend
+      pod-template-hash: d659b97fb
+    name: counter-frontend-d659b97fb-lqlqt
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: counter-frontend-d659b97fb
+      uid: 41a8f7af-b7fe-4cf4-b7c2-a9cc204bbdea
+    resourceVersion: "582097219"
+    uid: 7e5d05b0-40b9-4154-ae22-85242c973d41
+  spec:
+    containers:
+    - env:
+      - name: npm_config_cache
+        value: ./.npm-cache
+      - name: NODE_ENV
+        value: production
+      - name: BACKEND_URL
+        valueFrom:
+          configMapKeyRef:
+            key: backend_url
+            name: counter-backend
+      image: ghcr.io/jonathanxdr/counter-frontend:v1
+      imagePullPolicy: IfNotPresent
+      name: counter-frontend
+      ports:
+      - containerPort: 3000
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 600m
+          memory: 768Mi
+        requests:
+          cpu: 10m
+          ephemeral-storage: 100Ki
+          memory: 100Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1001170000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-hfkbv
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    imagePullSecrets:
+    - name: default-dockercfg-fchpn
+    - name: ghcr
+    nodeName: worker-175e
+    nodeSelector:
+      node-role.kubernetes.io/app: ""
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1001170000
+      seLinuxOptions:
+        level: s0:c34,c24
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: kube-api-access-hfkbv
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+        - configMap:
+            items:
+            - key: service-ca.crt
+              path: service-ca.crt
+            name: openshift-service-ca.crt
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:21:41Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:21:43Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:21:43Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T13:21:41Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: cri-o://96be665bfbac976e10be485fffe67932facba2b64dd9b622be0148aab2ab35f4
+      image: ghcr.io/jonathanxdr/counter-frontend:v1
+      imageID: ghcr.io/jonathanxdr/counter-frontend@sha256:4db6f89be439d98bce7aaf893786de586df6c752a4ecb85c278a32cd10768e94
+      lastState: {}
+      name: counter-frontend
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2022-11-15T13:21:42Z"
+    hostIP: 85.217.160.230
+    phase: Running
+    podIP: 10.0.10.252
+    podIPs:
+    - ip: 10.0.10.252
+    qosClass: Burstable
+    startTime: "2022-11-15T13:21:41Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      k8s.v1.cni.cncf.io/network-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.9.227"
+            ],
+            "mac": "be:0f:6f:6d:1a:8f",
+            "default": true,
+            "dns": {}
+        }]
+      k8s.v1.cni.cncf.io/networks-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.9.227"
+            ],
+            "mac": "be:0f:6f:6d:1a:8f",
+            "default": true,
+            "dns": {}
+        }]
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, ephemeral-storage,
+        memory request for container counter-postgresadmin; cpu, memory limit for
+        container counter-postgresadmin'
+      openshift.io/scc: restricted
+    creationTimestamp: "2022-11-15T14:52:41Z"
+    generateName: counter-postgresadmin-b86574689-
+    labels:
+      app: counter-postgresadmin
+      pod-template-hash: b86574689
+    name: counter-postgresadmin-b86574689-f9kpg
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: counter-postgresadmin-b86574689
+      uid: f13fa023-471e-4f39-bed5-f39ceb717601
+    resourceVersion: "582201795"
+    uid: 5c081e98-6dca-4bb1-846a-66584a1b6a72
+  spec:
+    containers:
+    - env:
+      - name: PGADMIN_DEFAULT_EMAIL
+        valueFrom:
+          secretKeyRef:
+            key: pgadmin-default-email
+            name: counter-postgresadmin
+      - name: PGADMIN_DEFAULT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: pgadmin-default-password
+            name: counter-postgresadmin
+      - name: PGADMIN_LISTEN_PORT
+        valueFrom:
+          configMapKeyRef:
+            key: pgadmin-listen-port
+            name: counter-postgresadmin
+      image: quay.io/sticen/pgadmin4
+      imagePullPolicy: Always
+      name: counter-postgresadmin
+      ports:
+      - containerPort: 8080
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 600m
+          memory: 768Mi
+        requests:
+          cpu: 10m
+          ephemeral-storage: 100Ki
+          memory: 100Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1001170000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-cmmvf
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    imagePullSecrets:
+    - name: default-dockercfg-fchpn
+    - name: ghcr
+    nodeName: worker-5e68
+    nodeSelector:
+      node-role.kubernetes.io/app: ""
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1001170000
+      seLinuxOptions:
+        level: s0:c34,c24
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: kube-api-access-cmmvf
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+        - configMap:
+            items:
+            - key: service-ca.crt
+              path: service-ca.crt
+            name: openshift-service-ca.crt
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T14:52:41Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T14:52:43Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T14:52:43Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T14:52:41Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: cri-o://7f5027b4e727bd374785b597ebae463d1826b008345835966829e0e884efc025
+      image: docker.io/dpage/pgadmin4:latest
+      imageID: docker.io/dpage/pgadmin4@sha256:a220fea89298275e088be066b0bb6726c363ebb583343c89cd8a8d547b9728cf
+      lastState: {}
+      name: counter-postgresadmin
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2022-11-15T14:52:43Z"
+    hostIP: 85.217.160.220
+    phase: Running
+    podIP: 10.0.9.227
+    podIPs:
+    - ip: 10.0.9.227
+    qosClass: Burstable
+    startTime: "2022-11-15T14:52:41Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      k8s.v1.cni.cncf.io/network-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.11.14"
+            ],
+            "mac": "ba:e9:4b:8c:a1:7d",
+            "default": true,
+            "dns": {}
+        }]
+      k8s.v1.cni.cncf.io/networks-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.11.14"
+            ],
+            "mac": "ba:e9:4b:8c:a1:7d",
+            "default": true,
+            "dns": {}
+        }]
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: ephemeral-storage request
+        for container mariadb'
+      openshift.io/scc: restricted
+    creationTimestamp: "2022-11-15T10:13:21Z"
+    generateName: mysql-5c859c547b-
+    labels:
+      app: mysql
+      pod-template-hash: 5c859c547b
+      tier: database
+    name: mysql-5c859c547b-h22hb
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: mysql-5c859c547b
+      uid: 22d8a87f-9ff9-45f5-8790-53ef118f3a23
+    resourceVersion: "582008073"
+    uid: 347ac096-9334-41d0-b561-904b194d19dc
+  spec:
+    containers:
+    - env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: password
+            name: mysqlpassword
+      image: mariadb
+      imagePullPolicy: Always
+      name: mariadb
+      ports:
+      - containerPort: 3306
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 500m
+          ephemeral-storage: 100Ki
+          memory: 512Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1001170000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/mysql
+        name: mysqlvolume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-t7nlz
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    imagePullSecrets:
+    - name: default-dockercfg-fchpn
+    - name: ghcr
+    nodeName: worker-0f6e
+    nodeSelector:
+      node-role.kubernetes.io/app: ""
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1001170000
+      seLinuxOptions:
+        level: s0:c34,c24
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: mysqlvolume
+      persistentVolumeClaim:
+        claimName: mysqlvolume
+    - name: kube-api-access-t7nlz
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+        - configMap:
+            items:
+            - key: service-ca.crt
+              path: service-ca.crt
+            name: openshift-service-ca.crt
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:13:22Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T12:11:31Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T12:11:31Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:13:22Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: cri-o://ef37ab856a085c56f8053cd594dffc11399ea16aba26364a0454dc3f20fddbac
+      image: docker.io/library/mariadb:10.9.4
+      imageID: docker.io/library/mariadb@sha256:5e2a3416f8633f8ca25778d13439cfcee4172743e1bd2a45cd1def0dceff6d3b
+      lastState: {}
+      name: mariadb
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2022-11-15T12:11:30Z"
+    hostIP: 194.182.161.247
+    phase: Running
+    podIP: 10.0.11.14
+    podIPs:
+    - ip: 10.0.11.14
+    qosClass: Guaranteed
+    startTime: "2022-11-15T10:13:22Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: ephemeral-storage request
+        for container mariadb'
+      openshift.io/scc: restricted
+    creationTimestamp: "2022-11-15T10:16:43Z"
+    generateName: mysql-7fcc7b6c5f-
+    labels:
+      app: mysql
+      pod-template-hash: 7fcc7b6c5f
+      tier: database
+    name: mysql-7fcc7b6c5f-pcvnz
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: mysql-7fcc7b6c5f
+      uid: 8cb42a27-8873-4e76-94f8-2e2da8df061e
+    resourceVersion: "581858860"
+    uid: eda6bece-c9cf-4ec1-b795-868a61066440
+  spec:
+    containers:
+    - env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: password
+            name: mysqlpassword
+      image: mariadb:10
+      imagePullPolicy: Always
+      name: mariadb
+      ports:
+      - containerPort: 3306
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 500m
+          ephemeral-storage: 100Ki
+          memory: 512Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1001170000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/mysql
+        name: mysqlvolume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-kzs9c
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    imagePullSecrets:
+    - name: default-dockercfg-fchpn
+    - name: ghcr
+    nodeName: worker-5e68
+    nodeSelector:
+      node-role.kubernetes.io/app: ""
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1001170000
+      seLinuxOptions:
+        level: s0:c34,c24
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: mysqlvolume
+      persistentVolumeClaim:
+        claimName: mysqlvolume
+    - name: kube-api-access-kzs9c
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+        - configMap:
+            items:
+            - key: service-ca.crt
+              path: service-ca.crt
+            name: openshift-service-ca.crt
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:18:59Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:18:59Z"
+      message: 'containers with unready status: [mariadb]'
+      reason: ContainersNotReady
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:18:59Z"
+      message: 'containers with unready status: [mariadb]'
+      reason: ContainersNotReady
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:18:59Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - image: mariadb:10
+      imageID: ""
+      lastState: {}
+      name: mariadb
+      ready: false
+      restartCount: 0
+      started: false
+      state:
+        waiting:
+          reason: ContainerCreating
+    hostIP: 85.217.160.220
+    phase: Pending
+    qosClass: Guaranteed
+    startTime: "2022-11-15T10:18:59Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      k8s.v1.cni.cncf.io/network-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.10.60"
+            ],
+            "mac": "6e:62:cb:ef:99:8f",
+            "default": true,
+            "dns": {}
+        }]
+      k8s.v1.cni.cncf.io/networks-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.10.60"
+            ],
+            "mac": "6e:62:cb:ef:99:8f",
+            "default": true,
+            "dns": {}
+        }]
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, ephemeral-storage,
+        memory request for container quotes; cpu, memory limit for container quotes'
+      openshift.io/scc: restricted
+    creationTimestamp: "2022-11-15T10:16:43Z"
+    generateName: quotes-54d44c56d8-
+    labels:
+      app: quotes
+      pod-template-hash: 54d44c56d8
+    name: quotes-54d44c56d8-ln59p
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: quotes-54d44c56d8
+      uid: 84110b16-e503-427a-b644-ce31d91cb83a
+    resourceVersion: "581859260"
+    uid: bac40fad-5b92-49b7-a410-a0e998c134cc
+  spec:
+    containers:
+    - env:
+      - name: DB_SERVICE_NAME
+        value: mysql
+      image: quay.io/donschenck/quotes:v1
+      imagePullPolicy: Always
+      name: quotes
+      ports:
+      - containerPort: 10000
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 600m
+          memory: 768Mi
+        requests:
+          cpu: 10m
+          ephemeral-storage: 100Ki
+          memory: 100Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1001170000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-d86p7
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    imagePullSecrets:
+    - name: default-dockercfg-fchpn
+    - name: ghcr
+    nodeName: worker-175e
+    nodeSelector:
+      node-role.kubernetes.io/app: ""
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1001170000
+      seLinuxOptions:
+        level: s0:c34,c24
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: kube-api-access-d86p7
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+        - configMap:
+            items:
+            - key: service-ca.crt
+              path: service-ca.crt
+            name: openshift-service-ca.crt
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:18:59Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:19:04Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:19:04Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:18:59Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: cri-o://7e91ccb15d5458e97299b6e0abafa7df311655ac3126ee34acad9aa28b29102d
+      image: quay.io/donschenck/quotes:v1
+      imageID: quay.io/donschenck/quotes@sha256:9cae13479f3ad1d22f88f7ce01caf969cdeb14005d385b6e05d68d9f69ce8540
+      lastState: {}
+      name: quotes
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2022-11-15T10:19:03Z"
+    hostIP: 85.217.160.230
+    phase: Running
+    podIP: 10.0.10.60
+    podIPs:
+    - ip: 10.0.10.60
+    qosClass: Burstable
+    startTime: "2022-11-15T10:18:59Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      k8s.v1.cni.cncf.io/network-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.10.136"
+            ],
+            "mac": "ee:c1:58:10:c6:c1",
+            "default": true,
+            "dns": {}
+        }]
+      k8s.v1.cni.cncf.io/networks-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.10.136"
+            ],
+            "mac": "ee:c1:58:10:c6:c1",
+            "default": true,
+            "dns": {}
+        }]
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, ephemeral-storage,
+        memory request for container quotes; cpu, memory limit for container quotes'
+      openshift.io/scc: restricted
+    creationTimestamp: "2022-11-15T10:16:41Z"
+    generateName: quotesweb-6bf56b6ff4-
+    labels:
+      app: quotesweb
+      pod-template-hash: 6bf56b6ff4
+    name: quotesweb-6bf56b6ff4-pbm24
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: quotesweb-6bf56b6ff4
+      uid: a73945ac-b433-44f3-a3f0-825e684623b2
+    resourceVersion: "581859034"
+    uid: a9db2a65-075d-4b7a-b7fc-a7fff835a196
+  spec:
+    containers:
+    - image: ghcr.io/jonathanxdr/quotesweb:v2
+      imagePullPolicy: Always
+      name: quotes
+      ports:
+      - containerPort: 3000
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 600m
+          memory: 768Mi
+        requests:
+          cpu: 10m
+          ephemeral-storage: 100Ki
+          memory: 100Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1001170000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-24dmc
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    imagePullSecrets:
+    - name: default-dockercfg-fchpn
+    - name: ghcr
+    nodeName: worker-175e
+    nodeSelector:
+      node-role.kubernetes.io/app: ""
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1001170000
+      seLinuxOptions:
+        level: s0:c34,c24
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: kube-api-access-24dmc
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+        - configMap:
+            items:
+            - key: service-ca.crt
+              path: service-ca.crt
+            name: openshift-service-ca.crt
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:18:59Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:19:02Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:19:02Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:18:58Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: cri-o://d383fc80d5b368ef8f77acdf455b2fbdf7db2e0d61c457958cc9c3e60974a60a
+      image: ghcr.io/jonathanxdr/quotesweb:v2
+      imageID: ghcr.io/jonathanxdr/quotesweb@sha256:edbd8dd2df8b2c8c5bf6974e202fcb103d34c6196c21f76ad51c938512a614c2
+      lastState: {}
+      name: quotes
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2022-11-15T10:19:01Z"
+    hostIP: 85.217.160.230
+    phase: Running
+    podIP: 10.0.10.136
+    podIPs:
+    - ip: 10.0.10.136
+    qosClass: Burstable
+    startTime: "2022-11-15T10:18:59Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      k8s.v1.cni.cncf.io/network-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.11.88"
+            ],
+            "mac": "6e:73:73:43:a5:d4",
+            "default": true,
+            "dns": {}
+        }]
+      k8s.v1.cni.cncf.io/networks-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.11.88"
+            ],
+            "mac": "6e:73:73:43:a5:d4",
+            "default": true,
+            "dns": {}
+        }]
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, ephemeral-storage,
+        memory request for container quotes; cpu, memory limit for container quotes'
+      openshift.io/scc: restricted
+    creationTimestamp: "2022-11-15T10:13:22Z"
+    generateName: quotesweb-6bf56b6ff4-
+    labels:
+      app: quotesweb
+      pod-template-hash: 6bf56b6ff4
+    name: quotesweb-6bf56b6ff4-prg74
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: quotesweb-6bf56b6ff4
+      uid: a73945ac-b433-44f3-a3f0-825e684623b2
+    resourceVersion: "581841957"
+    uid: 577e6402-dcf6-44ea-a29f-560f6f0fa4bb
+  spec:
+    containers:
+    - image: ghcr.io/jonathanxdr/quotesweb:v2
+      imagePullPolicy: Always
+      name: quotes
+      ports:
+      - containerPort: 3000
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 600m
+          memory: 768Mi
+        requests:
+          cpu: 10m
+          ephemeral-storage: 100Ki
+          memory: 100Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1001170000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-v8h4d
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    imagePullSecrets:
+    - name: default-dockercfg-fchpn
+    - name: ghcr
+    nodeName: worker-0f6e
+    nodeSelector:
+      node-role.kubernetes.io/app: ""
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1001170000
+      seLinuxOptions:
+        level: s0:c34,c24
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: kube-api-access-v8h4d
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+        - configMap:
+            items:
+            - key: service-ca.crt
+              path: service-ca.crt
+            name: openshift-service-ca.crt
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:13:22Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:13:39Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:13:39Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:13:22Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: cri-o://848b173c90cd777b42e39855ace96d8d2360e28be91a62965925d5aa2c4c45bb
+      image: ghcr.io/jonathanxdr/quotesweb:v2
+      imageID: ghcr.io/jonathanxdr/quotesweb@sha256:edbd8dd2df8b2c8c5bf6974e202fcb103d34c6196c21f76ad51c938512a614c2
+      lastState: {}
+      name: quotes
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2022-11-15T10:13:39Z"
+    hostIP: 194.182.161.247
+    phase: Running
+    podIP: 10.0.11.88
+    podIPs:
+    - ip: 10.0.11.88
+    qosClass: Burstable
+    startTime: "2022-11-15T10:13:22Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      k8s.v1.cni.cncf.io/network-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.9.57"
+            ],
+            "mac": "02:14:6f:2c:a1:ab",
+            "default": true,
+            "dns": {}
+        }]
+      k8s.v1.cni.cncf.io/networks-status: |-
+        [{
+            "name": "cilium",
+            "interface": "eth0",
+            "ips": [
+                "10.0.9.57"
+            ],
+            "mac": "02:14:6f:2c:a1:ab",
+            "default": true,
+            "dns": {}
+        }]
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, ephemeral-storage,
+        memory request for container quotes; cpu, memory limit for container quotes'
+      openshift.io/scc: restricted
+    creationTimestamp: "2022-11-15T10:16:40Z"
+    generateName: quotesweb-6bf56b6ff4-
+    labels:
+      app: quotesweb
+      pod-template-hash: 6bf56b6ff4
+    name: quotesweb-6bf56b6ff4-rsdhp
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: quotesweb-6bf56b6ff4
+      uid: a73945ac-b433-44f3-a3f0-825e684623b2
+    resourceVersion: "581862381"
+    uid: 02d5b4e0-8c20-42bb-83f0-61f790ab67a3
+  spec:
+    containers:
+    - image: ghcr.io/jonathanxdr/quotesweb:v2
+      imagePullPolicy: Always
+      name: quotes
+      ports:
+      - containerPort: 3000
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 600m
+          memory: 768Mi
+        requests:
+          cpu: 10m
+          ephemeral-storage: 100Ki
+          memory: 100Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1001170000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-c9dwf
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    imagePullSecrets:
+    - name: default-dockercfg-fchpn
+    - name: ghcr
+    nodeName: worker-5e68
+    nodeSelector:
+      node-role.kubernetes.io/app: ""
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1001170000
+      seLinuxOptions:
+        level: s0:c34,c24
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: kube-api-access-c9dwf
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+        - configMap:
+            items:
+            - key: service-ca.crt
+              path: service-ca.crt
+            name: openshift-service-ca.crt
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:18:59Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:19:45Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:19:45Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2022-11-15T10:18:58Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: cri-o://4722e2b8d5d0764ba6925f24fd1e4be363f69e080e6026a7b8494fd85de31fa7
+      image: ghcr.io/jonathanxdr/quotesweb:v2
+      imageID: ghcr.io/jonathanxdr/quotesweb@sha256:edbd8dd2df8b2c8c5bf6974e202fcb103d34c6196c21f76ad51c938512a614c2
+      lastState: {}
+      name: quotes
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2022-11-15T10:19:44Z"
+    hostIP: 85.217.160.220
+    phase: Running
+    podIP: 10.0.9.57
+    podIPs:
+    - ip: 10.0.9.57
+    qosClass: Burstable
+    startTime: "2022-11-15T10:18:59Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"counter-backend","namespace":"zlic-jruss1"},"spec":{"ports":[{"name":"8080-tcp","port":8080,"protocol":"TCP","targetPort":8080}],"selector":{"app":"counter-backend"}}}
+    creationTimestamp: "2022-11-15T13:22:10Z"
+    name: counter-backend
+    namespace: zlic-jruss1
+    resourceVersion: "582097758"
+    uid: 469cadae-1ac5-46d3-ab57-47e65a48e404
+  spec:
+    clusterIP: 172.30.212.22
+    clusterIPs:
+    - 172.30.212.22
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: counter-backend
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"counter-database","namespace":"zlic-jruss1"},"spec":{"ports":[{"port":5432,"protocol":"TCP","targetPort":5432}],"selector":{"app":"counter-database"}}}
+    creationTimestamp: "2022-11-15T10:05:07Z"
+    name: counter-database
+    namespace: zlic-jruss1
+    resourceVersion: "581881640"
+    uid: b15e1f73-db15-41e7-ab2d-78cafc8ea301
+  spec:
+    clusterIP: 172.30.46.201
+    clusterIPs:
+    - 172.30.46.201
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      app: counter-database
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"counter-frontend","namespace":"zlic-jruss1"},"spec":{"ports":[{"name":"3000-tcp","port":3000,"protocol":"TCP","targetPort":3000}],"selector":{"app":"counter-frontend"}}}
+    creationTimestamp: "2022-11-15T13:21:41Z"
+    name: counter-frontend
+    namespace: zlic-jruss1
+    resourceVersion: "582097171"
+    uid: f7fa9bcf-ec96-4394-83c0-7910ff55f631
+  spec:
+    clusterIP: 172.30.110.90
+    clusterIPs:
+    - 172.30.110.90
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: 3000-tcp
+      port: 3000
+      protocol: TCP
+      targetPort: 3000
+    selector:
+      app: counter-frontend
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"counter-postgresadmin","namespace":"zlic-jruss1"},"spec":{"ports":[{"name":"8080-tcp","port":8080,"protocol":"TCP","targetPort":8080}],"selector":{"app":"counter-postgresadmin"}}}
+    creationTimestamp: "2022-11-15T14:52:41Z"
+    name: counter-postgresadmin
+    namespace: zlic-jruss1
+    resourceVersion: "582202880"
+    uid: 4734786b-d1c4-46f8-ab5a-098bf6070843
+  spec:
+    clusterIP: 172.30.20.244
+    clusterIPs:
+    - 172.30.20.244
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: counter-postgresadmin
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"html-page"},"name":"html-page","namespace":"zlic-jruss1"},"spec":{"ports":[{"name":"8080-tcp","port":8080,"protocol":"TCP","targetPort":8080}],"selector":{"app":"html-page"},"sessionAffinity":"None","type":"ClusterIP"}}
+    creationTimestamp: "2022-11-09T13:06:07Z"
+    labels:
+      app: html-page
+    name: html-page
+    namespace: zlic-jruss1
+    resourceVersion: "572154281"
+    uid: 28e309aa-443b-45a9-9fcd-8b4bf7e89721
+  spec:
+    clusterIP: 172.30.185.18
+    clusterIPs:
+    - 172.30.185.18
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: html-page
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"html-page"},"name":"html-page-service","namespace":"zlic-jruss1"},"spec":{"ports":[{"name":"8080-tcp","port":8080,"protocol":"TCP","targetPort":8080}],"selector":{"app":"html-page"},"sessionAffinity":"None","type":"ClusterIP"}}
+    creationTimestamp: "2022-11-09T12:56:29Z"
+    labels:
+      app: html-page
+    name: html-page-service
+    namespace: zlic-jruss1
+    resourceVersion: "572146892"
+    uid: cfd86aa0-2dbf-4781-b9be-cec32c74aa16
+  spec:
+    clusterIP: 172.30.213.211
+    clusterIPs:
+    - 172.30.213.211
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: html-page
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: "2022-11-14T15:00:20Z"
+    name: mysql
+    namespace: zlic-jruss1
+    resourceVersion: "580511725"
+    uid: eb0bb541-5b8b-49ba-b638-816b94753663
+  spec:
+    clusterIP: 172.30.199.61
+    clusterIPs:
+    - 172.30.199.61
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - nodePort: 30282
+      port: 3306
+      protocol: TCP
+      targetPort: 3306
+    selector:
+      app: mysql
+      tier: database
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"quotes"},"name":"quotes","namespace":"zlic-jruss1"},"spec":{"ports":[{"name":"10000-tcp","port":10000,"protocol":"TCP","targetPort":10000},{"name":"8443-tcp","port":8443,"protocol":"TCP","targetPort":8443},{"name":"8778-tcp","port":8778,"protocol":"TCP","targetPort":8778}],"selector":{"app":"quotes"},"sessionAffinity":"None","type":"ClusterIP"}}
+    creationTimestamp: "2022-11-09T14:52:33Z"
+    labels:
+      app: quotes
+    name: quotes
+    namespace: zlic-jruss1
+    resourceVersion: "580375939"
+    uid: 799a8fbf-f9e9-41f4-a681-65a31830daba
+  spec:
+    clusterIP: 172.30.88.110
+    clusterIPs:
+    - 172.30.88.110
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: 10000-tcp
+      port: 10000
+      protocol: TCP
+      targetPort: 10000
+    - name: 8443-tcp
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
+    - name: 8778-tcp
+      port: 8778
+      protocol: TCP
+      targetPort: 8778
+    selector:
+      app: quotes
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: "2022-11-09T15:12:12Z"
+    labels:
+      app: quotesweb
+    name: quotesweb
+    namespace: zlic-jruss1
+    resourceVersion: "572303058"
+    uid: 499ae9eb-6f9e-4a15-9b6a-6d5e8dd971c5
+  spec:
+    clusterIP: 172.30.138.44
+    clusterIPs:
+    - 172.30.138.44
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: 3000-tcp
+      port: 3000
+      protocol: TCP
+      targetPort: 3000
+    selector:
+      app: quotesweb
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"counter-backend","namespace":"zlic-jruss1"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"counter-backend"}},"template":{"metadata":{"labels":{"app":"counter-backend"}},"spec":{"containers":[{"env":[{"name":"npm_config_cache","value":"./.npm-cache"},{"name":"NODE_ENV","value":"production"},{"name":"DB_HOST","valueFrom":{"configMapKeyRef":{"key":"db_host","name":"counter-database"}}},{"name":"DB_NAME","valueFrom":{"secretKeyRef":{"key":"database-name","name":"counter-database"}}},{"name":"DB_USER","valueFrom":{"secretKeyRef":{"key":"database-user","name":"counter-database"}}},{"name":"DB_PASSWORD","valueFrom":{"secretKeyRef":{"key":"database-password","name":"counter-database"}}}],"image":"ghcr.io/jonathanxdr/counter-backend:v1","name":"counter-backend","ports":[{"containerPort":8080}]}]}}}}
+    creationTimestamp: "2022-11-15T13:22:10Z"
+    generation: 2
+    name: counter-backend
+    namespace: zlic-jruss1
+    resourceVersion: "582098108"
+    uid: d2c4864d-74a6-45d1-a002-8a1b1fbf9e51
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 2
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: counter-backend
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: counter-backend
+      spec:
+        containers:
+        - env:
+          - name: npm_config_cache
+            value: ./.npm-cache
+          - name: NODE_ENV
+            value: production
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                key: db_host
+                name: counter-database
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: counter-database
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: counter-database
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: counter-database
+          image: ghcr.io/jonathanxdr/counter-backend:v1
+          imagePullPolicy: IfNotPresent
+          name: counter-backend
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 2
+    conditions:
+    - lastTransitionTime: "2022-11-15T13:22:10Z"
+      lastUpdateTime: "2022-11-15T13:22:12Z"
+      message: ReplicaSet "counter-backend-d978d4ff" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2022-11-15T13:22:27Z"
+      lastUpdateTime: "2022-11-15T13:22:27Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 2
+    readyReplicas: 2
+    replicas: 2
+    updatedReplicas: 2
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "2"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"counter-database","namespace":"zlic-jruss1"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"counter-database"}},"template":{"metadata":{"labels":{"app":"counter-database"}},"spec":{"containers":[{"env":[{"name":"POSTGRESQL_USER","valueFrom":{"secretKeyRef":{"key":"database-user","name":"counter-database"}}},{"name":"POSTGRESQL_PASSWORD","valueFrom":{"secretKeyRef":{"key":"database-password","name":"counter-database"}}},{"name":"POSTGRESQL_DATABASE","valueFrom":{"secretKeyRef":{"key":"database-name","name":"counter-database"}}}],"image":"quay.io/centos7/postgresql-10-centos7:20221109","imagePullPolicy":"Always","name":"counter-database","ports":[{"containerPort":5432}]}]}}}}
+    creationTimestamp: "2022-11-15T10:05:07Z"
+    generation: 2
+    name: counter-database
+    namespace: zlic-jruss1
+    resourceVersion: "581881802"
+    uid: 0683e01c-7aec-462f-8fe2-2dfd25a23044
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: counter-database
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: counter-database
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: counter-database
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: counter-database
+          - name: POSTGRESQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: counter-database
+          image: quay.io/centos7/postgresql-10-centos7:20221109
+          imagePullPolicy: Always
+          name: counter-database
+          ports:
+          - containerPort: 5432
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2022-11-15T10:19:29Z"
+      lastUpdateTime: "2022-11-15T10:19:29Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2022-11-15T10:05:07Z"
+      lastUpdateTime: "2022-11-15T10:32:00Z"
+      message: ReplicaSet "counter-database-6d89b78ff9" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"counter-frontend","namespace":"zlic-jruss1"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"counter-frontend"}},"template":{"metadata":{"labels":{"app":"counter-frontend"}},"spec":{"containers":[{"env":[{"name":"npm_config_cache","value":"./.npm-cache"},{"name":"NODE_ENV","value":"production"},{"name":"BACKEND_URL","valueFrom":{"configMapKeyRef":{"key":"backend_url","name":"counter-backend"}}}],"image":"ghcr.io/jonathanxdr/counter-frontend:v1","name":"counter-frontend","ports":[{"containerPort":3000}]}]}}}}
+    creationTimestamp: "2022-11-15T13:21:41Z"
+    generation: 2
+    name: counter-frontend
+    namespace: zlic-jruss1
+    resourceVersion: "582097974"
+    uid: d5b1156b-8992-472e-a457-20011b42aa59
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 2
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: counter-frontend
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: counter-frontend
+      spec:
+        containers:
+        - env:
+          - name: npm_config_cache
+            value: ./.npm-cache
+          - name: NODE_ENV
+            value: production
+          - name: BACKEND_URL
+            valueFrom:
+              configMapKeyRef:
+                key: backend_url
+                name: counter-backend
+          image: ghcr.io/jonathanxdr/counter-frontend:v1
+          imagePullPolicy: IfNotPresent
+          name: counter-frontend
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 2
+    conditions:
+    - lastTransitionTime: "2022-11-15T13:21:41Z"
+      lastUpdateTime: "2022-11-15T13:21:43Z"
+      message: ReplicaSet "counter-frontend-d659b97fb" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2022-11-15T13:22:19Z"
+      lastUpdateTime: "2022-11-15T13:22:19Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 2
+    readyReplicas: 2
+    replicas: 2
+    updatedReplicas: 2
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"counter-postgresadmin"},"name":"counter-postgresadmin","namespace":"zlic-jruss1"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"counter-postgresadmin"}},"template":{"metadata":{"labels":{"app":"counter-postgresadmin"}},"spec":{"containers":[{"env":[{"name":"PGADMIN_DEFAULT_EMAIL","valueFrom":{"secretKeyRef":{"key":"pgadmin-default-email","name":"counter-postgresadmin"}}},{"name":"PGADMIN_DEFAULT_PASSWORD","valueFrom":{"secretKeyRef":{"key":"pgadmin-default-password","name":"counter-postgresadmin"}}},{"name":"PGADMIN_LISTEN_PORT","valueFrom":{"configMapKeyRef":{"key":"pgadmin-listen-port","name":"counter-postgresadmin"}}}],"image":"quay.io/sticen/pgadmin4","name":"counter-postgresadmin","ports":[{"containerPort":8080}]}]}}}}
+    creationTimestamp: "2022-11-15T14:52:40Z"
+    generation: 1
+    labels:
+      app: counter-postgresadmin
+    name: counter-postgresadmin
+    namespace: zlic-jruss1
+    resourceVersion: "582201801"
+    uid: 4c6c0281-c56c-4164-bb96-bc343145a910
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: counter-postgresadmin
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: counter-postgresadmin
+      spec:
+        containers:
+        - env:
+          - name: PGADMIN_DEFAULT_EMAIL
+            valueFrom:
+              secretKeyRef:
+                key: pgadmin-default-email
+                name: counter-postgresadmin
+          - name: PGADMIN_DEFAULT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: pgadmin-default-password
+                name: counter-postgresadmin
+          - name: PGADMIN_LISTEN_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: pgadmin-listen-port
+                name: counter-postgresadmin
+          image: quay.io/sticen/pgadmin4
+          imagePullPolicy: Always
+          name: counter-postgresadmin
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2022-11-15T14:52:44Z"
+      lastUpdateTime: "2022-11-15T14:52:44Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2022-11-15T14:52:41Z"
+      lastUpdateTime: "2022-11-15T14:52:44Z"
+      message: ReplicaSet "counter-postgresadmin-b86574689" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"html-page"},"name":"html-page-deployment","namespace":"zlic-jruss1"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"html-page"}},"template":{"metadata":{"labels":{"app":"html-page"}},"spec":{"containers":[{"image":"ghcr.io/jonathanxdr/html-page:v1","name":"html-page","ports":[{"containerPort":8080}]}]}}}}
+    creationTimestamp: "2022-11-09T12:56:28Z"
+    generation: 3
+    labels:
+      app: html-page
+    name: html-page-deployment
+    namespace: zlic-jruss1
+    resourceVersion: "572340398"
+    uid: fc5db245-e573-4090-bea5-37ed054979b5
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 0
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: html-page
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: html-page
+      spec:
+        containers:
+        - image: ghcr.io/jonathanxdr/html-page:v1
+          imagePullPolicy: IfNotPresent
+          name: html-page
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    conditions:
+    - lastTransitionTime: "2022-11-09T12:56:28Z"
+      lastUpdateTime: "2022-11-09T12:56:33Z"
+      message: ReplicaSet "html-page-deployment-7585bc976" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2022-11-09T12:57:24Z"
+      lastUpdateTime: "2022-11-09T12:57:24Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 3
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "2"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"mysql","namespace":"zlic-jruss1"},"spec":{"selector":{"matchLabels":{"app":"mysql","tier":"database"}},"template":{"metadata":{"labels":{"app":"mysql","tier":"database"}},"spec":{"containers":[{"env":[{"name":"MYSQL_ROOT_PASSWORD","valueFrom":{"secretKeyRef":{"key":"password","name":"mysqlpassword"}}}],"image":"mariadb:10","name":"mariadb","ports":[{"containerPort":3306}],"resources":{"limits":{"cpu":"500m","memory":"512Mi"}},"volumeMounts":[{"mountPath":"/var/lib/mysql","name":"mysqlvolume"}]}],"volumes":[{"name":"mysqlvolume","persistentVolumeClaim":{"claimName":"mysqlvolume"}}]}}}}
+    creationTimestamp: "2022-11-14T13:31:30Z"
+    generation: 6
+    name: mysql
+    namespace: zlic-jruss1
+    resourceVersion: "582021747"
+    uid: f7e819a0-73bf-42ab-98ac-5f6413a32ca2
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: mysql
+        tier: database
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: mysql
+          tier: database
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: mysqlpassword
+          image: mariadb:10
+          imagePullPolicy: Always
+          name: mariadb
+          ports:
+          - containerPort: 3306
+            protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: mysqlvolume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: mysqlvolume
+          persistentVolumeClaim:
+            claimName: mysqlvolume
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2022-11-15T12:11:31Z"
+      lastUpdateTime: "2022-11-15T12:11:31Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2022-11-15T12:21:32Z"
+      lastUpdateTime: "2022-11-15T12:21:32Z"
+      message: ReplicaSet "mysql-7fcc7b6c5f" has timed out progressing.
+      reason: ProgressDeadlineExceeded
+      status: "False"
+      type: Progressing
+    observedGeneration: 6
+    readyReplicas: 1
+    replicas: 2
+    unavailableReplicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "2"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"quotes"},"name":"quotes","namespace":"zlic-jruss1"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"quotes"}},"template":{"metadata":{"labels":{"app":"quotes"}},"spec":{"containers":[{"image":"quay.io/donschenck/quotes:v1","imagePullPolicy":"Always","name":"quotes","ports":[{"containerPort":10000,"protocol":"TCP"}]}]}}}}
+    creationTimestamp: "2022-11-09T14:52:18Z"
+    generation: 4
+    labels:
+      app: quotes
+    name: quotes
+    namespace: zlic-jruss1
+    resourceVersion: "581859268"
+    uid: 424f0818-d503-46f8-9242-f5b2a8b66f9e
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: quotes
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: quotes
+      spec:
+        containers:
+        - env:
+          - name: DB_SERVICE_NAME
+            value: mysql
+          image: quay.io/donschenck/quotes:v1
+          imagePullPolicy: Always
+          name: quotes
+          ports:
+          - containerPort: 10000
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2022-11-09T14:52:18Z"
+      lastUpdateTime: "2022-11-14T15:11:51Z"
+      message: ReplicaSet "quotes-54d44c56d8" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2022-11-15T10:19:04Z"
+      lastUpdateTime: "2022-11-15T10:19:04Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 4
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "3"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"quotesweb"},"name":"quotesweb","namespace":"zlic-jruss1"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"quotesweb"}},"template":{"metadata":{"labels":{"app":"quotesweb"}},"spec":{"containers":[{"image":"ghcr.io/jonathanxdr/quotesweb:v2","imagePullPolicy":"Always","name":"quotes","ports":[{"containerPort":3000,"protocol":"TCP"}]}]}}}}
+    creationTimestamp: "2022-11-09T15:11:57Z"
+    generation: 6
+    labels:
+      app: quotesweb
+    name: quotesweb
+    namespace: zlic-jruss1
+    resourceVersion: "581862386"
+    uid: 3d16eb96-0a2f-421d-8cd2-206b9e876686
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: quotesweb
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: quotesweb
+      spec:
+        containers:
+        - image: ghcr.io/jonathanxdr/quotesweb:v2
+          imagePullPolicy: Always
+          name: quotes
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2022-11-09T15:11:57Z"
+      lastUpdateTime: "2022-11-14T13:17:31Z"
+      message: ReplicaSet "quotesweb-6bf56b6ff4" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2022-11-15T10:19:45Z"
+      lastUpdateTime: "2022-11-15T10:19:45Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 6
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2022-11-15T13:22:10Z"
+    generation: 2
+    labels:
+      app: counter-backend
+      pod-template-hash: d978d4ff
+    name: counter-backend-d978d4ff
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: counter-backend
+      uid: d2c4864d-74a6-45d1-a002-8a1b1fbf9e51
+    resourceVersion: "582098104"
+    uid: dfc22674-fd60-43bb-8b73-adb702a6aaea
+  spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        app: counter-backend
+        pod-template-hash: d978d4ff
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: counter-backend
+          pod-template-hash: d978d4ff
+      spec:
+        containers:
+        - env:
+          - name: npm_config_cache
+            value: ./.npm-cache
+          - name: NODE_ENV
+            value: production
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                key: db_host
+                name: counter-database
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: counter-database
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: counter-database
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: counter-database
+          image: ghcr.io/jonathanxdr/counter-backend:v1
+          imagePullPolicy: IfNotPresent
+          name: counter-backend
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 2
+    fullyLabeledReplicas: 2
+    observedGeneration: 2
+    readyReplicas: 2
+    replicas: 2
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2022-11-15T10:05:07Z"
+    generation: 2
+    labels:
+      app: counter-database
+      pod-template-hash: 5c55454487
+    name: counter-database-5c55454487
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: counter-database
+      uid: 0683e01c-7aec-462f-8fe2-2dfd25a23044
+    resourceVersion: "581881801"
+    uid: c1d14d0a-08e0-4e11-a0af-faa4e3d911b3
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: counter-database
+        pod-template-hash: 5c55454487
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: counter-database
+          pod-template-hash: 5c55454487
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: counter-database
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: counter-database
+          - name: POSTGRESQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: counter-database
+          image: quay.io/centos7/postgresql-10-centos7:20221109
+          imagePullPolicy: Always
+          name: coutner-database
+          ports:
+          - containerPort: 5432
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: "2022-11-15T10:31:54Z"
+    generation: 1
+    labels:
+      app: counter-database
+      pod-template-hash: 6d89b78ff9
+    name: counter-database-6d89b78ff9
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: counter-database
+      uid: 0683e01c-7aec-462f-8fe2-2dfd25a23044
+    resourceVersion: "581881787"
+    uid: e27cc28f-2446-455f-a545-651d5efd6dd3
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: counter-database
+        pod-template-hash: 6d89b78ff9
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: counter-database
+          pod-template-hash: 6d89b78ff9
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: counter-database
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: counter-database
+          - name: POSTGRESQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: counter-database
+          image: quay.io/centos7/postgresql-10-centos7:20221109
+          imagePullPolicy: Always
+          name: counter-database
+          ports:
+          - containerPort: 5432
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2022-11-15T13:21:41Z"
+    generation: 2
+    labels:
+      app: counter-frontend
+      pod-template-hash: d659b97fb
+    name: counter-frontend-d659b97fb
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: counter-frontend
+      uid: d5b1156b-8992-472e-a457-20011b42aa59
+    resourceVersion: "582097970"
+    uid: 41a8f7af-b7fe-4cf4-b7c2-a9cc204bbdea
+  spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        app: counter-frontend
+        pod-template-hash: d659b97fb
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: counter-frontend
+          pod-template-hash: d659b97fb
+      spec:
+        containers:
+        - env:
+          - name: npm_config_cache
+            value: ./.npm-cache
+          - name: NODE_ENV
+            value: production
+          - name: BACKEND_URL
+            valueFrom:
+              configMapKeyRef:
+                key: backend_url
+                name: counter-backend
+          image: ghcr.io/jonathanxdr/counter-frontend:v1
+          imagePullPolicy: IfNotPresent
+          name: counter-frontend
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 2
+    fullyLabeledReplicas: 2
+    observedGeneration: 2
+    readyReplicas: 2
+    replicas: 2
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2022-11-15T14:52:41Z"
+    generation: 1
+    labels:
+      app: counter-postgresadmin
+      pod-template-hash: b86574689
+    name: counter-postgresadmin-b86574689
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: counter-postgresadmin
+      uid: 4c6c0281-c56c-4164-bb96-bc343145a910
+    resourceVersion: "582201798"
+    uid: f13fa023-471e-4f39-bed5-f39ceb717601
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: counter-postgresadmin
+        pod-template-hash: b86574689
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: counter-postgresadmin
+          pod-template-hash: b86574689
+      spec:
+        containers:
+        - env:
+          - name: PGADMIN_DEFAULT_EMAIL
+            valueFrom:
+              secretKeyRef:
+                key: pgadmin-default-email
+                name: counter-postgresadmin
+          - name: PGADMIN_DEFAULT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: pgadmin-default-password
+                name: counter-postgresadmin
+          - name: PGADMIN_LISTEN_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: pgadmin-listen-port
+                name: counter-postgresadmin
+          image: quay.io/sticen/pgadmin4
+          imagePullPolicy: Always
+          name: counter-postgresadmin
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "0"
+      deployment.kubernetes.io/max-replicas: "0"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2022-11-09T12:56:28Z"
+    generation: 3
+    labels:
+      app: html-page
+      pod-template-hash: 7585bc976
+    name: html-page-deployment-7585bc976
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: html-page-deployment
+      uid: fc5db245-e573-4090-bea5-37ed054979b5
+    resourceVersion: "572340388"
+    uid: f505832d-1d63-4809-b7a3-2b8b1d93b6fe
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: html-page
+        pod-template-hash: 7585bc976
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: html-page
+          pod-template-hash: 7585bc976
+      spec:
+        containers:
+        - image: ghcr.io/jonathanxdr/html-page:v1
+          imagePullPolicy: IfNotPresent
+          name: html-page
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2022-11-14T13:31:30Z"
+    generation: 5
+    labels:
+      app: mysql
+      pod-template-hash: 5c859c547b
+      tier: database
+    name: mysql-5c859c547b
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: mysql
+      uid: f7e819a0-73bf-42ab-98ac-5f6413a32ca2
+    resourceVersion: "582008077"
+    uid: 22d8a87f-9ff9-45f5-8790-53ef118f3a23
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: mysql
+        pod-template-hash: 5c859c547b
+        tier: database
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: mysql
+          pod-template-hash: 5c859c547b
+          tier: database
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: mysqlpassword
+          image: mariadb
+          imagePullPolicy: Always
+          name: mariadb
+          ports:
+          - containerPort: 3306
+            protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: mysqlvolume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: mysqlvolume
+          persistentVolumeClaim:
+            claimName: mysqlvolume
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 5
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: "2022-11-14T13:47:35Z"
+    generation: 1
+    labels:
+      app: mysql
+      pod-template-hash: 7fcc7b6c5f
+      tier: database
+    name: mysql-7fcc7b6c5f
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: mysql
+      uid: f7e819a0-73bf-42ab-98ac-5f6413a32ca2
+    resourceVersion: "581852917"
+    uid: 8cb42a27-8873-4e76-94f8-2e2da8df061e
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: mysql
+        pod-template-hash: 7fcc7b6c5f
+        tier: database
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: mysql
+          pod-template-hash: 7fcc7b6c5f
+          tier: database
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: mysqlpassword
+          image: mariadb:10
+          imagePullPolicy: Always
+          name: mariadb
+          ports:
+          - containerPort: 3306
+            protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: mysqlvolume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: mysqlvolume
+          persistentVolumeClaim:
+            claimName: mysqlvolume
+  status:
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: "2022-11-14T15:11:47Z"
+    generation: 1
+    labels:
+      app: quotes
+      pod-template-hash: 54d44c56d8
+    name: quotes-54d44c56d8
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: quotes
+      uid: 424f0818-d503-46f8-9242-f5b2a8b66f9e
+    resourceVersion: "581859262"
+    uid: 84110b16-e503-427a-b644-ce31d91cb83a
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: quotes
+        pod-template-hash: 54d44c56d8
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: quotes
+          pod-template-hash: 54d44c56d8
+      spec:
+        containers:
+        - env:
+          - name: DB_SERVICE_NAME
+            value: mysql
+          image: quay.io/donschenck/quotes:v1
+          imagePullPolicy: Always
+          name: quotes
+          ports:
+          - containerPort: 10000
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2022-11-09T14:52:18Z"
+    generation: 4
+    labels:
+      app: quotes
+      pod-template-hash: 59864c7bf4
+    name: quotes-59864c7bf4
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: quotes
+      uid: 424f0818-d503-46f8-9242-f5b2a8b66f9e
+    resourceVersion: "580524781"
+    uid: 25ac3666-602a-4469-8c34-7d900d1a23d3
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: quotes
+        pod-template-hash: 59864c7bf4
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: quotes
+          pod-template-hash: 59864c7bf4
+      spec:
+        containers:
+        - image: quay.io/donschenck/quotes:v1
+          imagePullPolicy: Always
+          name: quotes
+          ports:
+          - containerPort: 10000
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 4
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: "2022-11-14T13:09:06Z"
+    generation: 2
+    labels:
+      app: quotesweb
+      pod-template-hash: 5f4dd7dcd7
+    name: quotesweb-5f4dd7dcd7
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: quotesweb
+      uid: 3d16eb96-0a2f-421d-8cd2-206b9e876686
+    resourceVersion: "580396242"
+    uid: 72829bfe-a102-4c85-a2b9-fb6c892c46a7
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: quotesweb
+        pod-template-hash: 5f4dd7dcd7
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: quotesweb
+          pod-template-hash: 5f4dd7dcd7
+      spec:
+        containers:
+        - image: ghcr.io/jonathanxdr/quotesweb:v1
+          imagePullPolicy: Always
+          name: quotes
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2022-11-09T15:11:57Z"
+    generation: 4
+    labels:
+      app: quotesweb
+      pod-template-hash: 66f7d67546
+    name: quotesweb-66f7d67546
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: quotesweb
+      uid: 3d16eb96-0a2f-421d-8cd2-206b9e876686
+    resourceVersion: "580387112"
+    uid: 61f38a79-d445-4ac1-9c13-d66d777c3137
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: quotesweb
+        pod-template-hash: 66f7d67546
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: quotesweb
+          pod-template-hash: 66f7d67546
+      spec:
+        containers:
+        - image: quay.io/donschenck/quotesweb:v1
+          imagePullPolicy: Always
+          name: quotes
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 4
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "3"
+      deployment.kubernetes.io/max-replicas: "4"
+      deployment.kubernetes.io/revision: "3"
+    creationTimestamp: "2022-11-14T13:17:18Z"
+    generation: 2
+    labels:
+      app: quotesweb
+      pod-template-hash: 6bf56b6ff4
+    name: quotesweb-6bf56b6ff4
+    namespace: zlic-jruss1
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: quotesweb
+      uid: 3d16eb96-0a2f-421d-8cd2-206b9e876686
+    resourceVersion: "581862384"
+    uid: a73945ac-b433-44f3-a3f0-825e684623b2
+  spec:
+    replicas: 3
+    selector:
+      matchLabels:
+        app: quotesweb
+        pod-template-hash: 6bf56b6ff4
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: quotesweb
+          pod-template-hash: 6bf56b6ff4
+      spec:
+        containers:
+        - image: ghcr.io/jonathanxdr/quotesweb:v2
+          imagePullPolicy: Always
+          name: quotes
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 3
+    fullyLabeledReplicas: 3
+    observedGeneration: 2
+    readyReplicas: 3
+    replicas: 3
+- apiVersion: autoscaling/v2
+  kind: HorizontalPodAutoscaler
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"autoscaling/v2","kind":"HorizontalPodAutoscaler","metadata":{"annotations":{},"name":"counter-backend","namespace":"zlic-jruss1"},"spec":{"maxReplicas":2,"metrics":[{"resource":{"name":"cpu","target":{"averageUtilization":80,"type":"Utilization"}},"type":"Resource"}],"minReplicas":2,"scaleTargetRef":{"apiVersion":"apps/v1","kind":"Deployment","name":"counter-backend"}}}
+    creationTimestamp: "2022-11-15T13:22:11Z"
+    name: counter-backend
+    namespace: zlic-jruss1
+    resourceVersion: "582104267"
+    uid: 6bb95170-1a7f-4478-8619-4cfbce57e13c
+  spec:
+    maxReplicas: 2
+    metrics:
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 80
+          type: Utilization
+      type: Resource
+    minReplicas: 2
+    scaleTargetRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: counter-backend
+  status:
+    conditions:
+    - lastTransitionTime: "2022-11-15T13:22:26Z"
+      message: recommended size matches current size
+      reason: ReadyForNewScale
+      status: "True"
+      type: AbleToScale
+    - lastTransitionTime: "2022-11-15T13:27:11Z"
+      message: the HPA was able to successfully calculate a replica count from cpu
+        resource utilization (percentage of request)
+      reason: ValidMetricFound
+      status: "True"
+      type: ScalingActive
+    - lastTransitionTime: "2022-11-15T13:27:11Z"
+      message: the desired replica count is less than the minimum replica count
+      reason: TooFewReplicas
+      status: "True"
+      type: ScalingLimited
+    currentMetrics:
+    - resource:
+        current:
+          averageUtilization: 0
+          averageValue: "0"
+        name: cpu
+      type: Resource
+    currentReplicas: 2
+    desiredReplicas: 2
+    lastScaleTime: "2022-11-15T13:22:26Z"
+- apiVersion: autoscaling/v2
+  kind: HorizontalPodAutoscaler
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"autoscaling/v2","kind":"HorizontalPodAutoscaler","metadata":{"annotations":{},"name":"counter-frontend","namespace":"zlic-jruss1"},"spec":{"maxReplicas":4,"metrics":[{"resource":{"name":"cpu","target":{"averageUtilization":80,"type":"Utilization"}},"type":"Resource"}],"minReplicas":2,"scaleTargetRef":{"apiVersion":"apps/v1","kind":"Deployment","name":"counter-frontend"}}}
+    creationTimestamp: "2022-11-15T13:21:42Z"
+    name: counter-frontend
+    namespace: zlic-jruss1
+    resourceVersion: "582103740"
+    uid: c7837263-725c-4b76-a1e1-ff8e9f3f1be2
+  spec:
+    maxReplicas: 4
+    metrics:
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 80
+          type: Utilization
+      type: Resource
+    minReplicas: 2
+    scaleTargetRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: counter-frontend
+  status:
+    conditions:
+    - lastTransitionTime: "2022-11-15T13:21:57Z"
+      message: recommended size matches current size
+      reason: ReadyForNewScale
+      status: "True"
+      type: AbleToScale
+    - lastTransitionTime: "2022-11-15T13:26:42Z"
+      message: the HPA was able to successfully calculate a replica count from cpu
+        resource utilization (percentage of request)
+      reason: ValidMetricFound
+      status: "True"
+      type: ScalingActive
+    - lastTransitionTime: "2022-11-15T13:26:42Z"
+      message: the desired replica count is less than the minimum replica count
+      reason: TooFewReplicas
+      status: "True"
+      type: ScalingLimited
+    currentMetrics:
+    - resource:
+        current:
+          averageUtilization: 0
+          averageValue: "0"
+        name: cpu
+      type: Resource
+    currentReplicas: 2
+    desiredReplicas: 2
+    lastScaleTime: "2022-11-15T13:21:57Z"
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","metadata":{"annotations":{},"labels":{"app":"qotd"},"name":"qotd","namespace":"zlic-jruss1"},"spec":{"replicas":1,"selector":{"app":"qotd"},"template":{"metadata":{"labels":{"app":"qotd"}},"spec":{"containers":[{"image":"image-registry.openshift-image-registry.svc:5000/pipelines-tutorial/qotd:latest","imagePullPolicy":"Always","name":"qotd","ports":[{"containerPort":10000,"protocol":"TCP"}]}]}},"triggers":[{"type":"ConfigChange"},{"imageChangeParams":{"automatic":true,"containerNames":["qotd"],"from":{"kind":"ImageStreamTag","name":"qotd:latest"}},"type":"ImageChange"}]}}
+    creationTimestamp: "2022-11-14T12:59:44Z"
+    generation: 1
+    labels:
+      app: qotd
+    name: qotd
+    namespace: zlic-jruss1
+    resourceVersion: "580375918"
+    uid: c4db5ea9-c06d-4913-a669-f221d1f166f0
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app: qotd
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: qotd
+      spec:
+        containers:
+        - image: image-registry.openshift-image-registry.svc:5000/pipelines-tutorial/qotd:latest
+          imagePullPolicy: Always
+          name: qotd
+          ports:
+          - containerPort: 10000
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - qotd
+        from:
+          kind: ImageStreamTag
+          name: qotd:latest
+          namespace: zlic-jruss1
+      type: ImageChange
+  status:
+    availableReplicas: 0
+    conditions:
+    - lastTransitionTime: "2022-11-14T12:59:44Z"
+      lastUpdateTime: "2022-11-14T12:59:44Z"
+      message: Deployment config does not have minimum availability.
+      status: "False"
+      type: Available
+    latestVersion: 0
+    observedGeneration: 1
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"route.openshift.io/v1","kind":"Route","metadata":{"annotations":{},"labels":{"app":"counter-backend"},"name":"counter-backend","namespace":"zlic-jruss1"},"spec":{"port":{"targetPort":"8080-tcp"},"tls":{"insecureEdgeTerminationPolicy":"Redirect","termination":"edge"},"to":{"kind":"Service","name":"counter-backend"}}}
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2022-11-15T13:22:10Z"
+    labels:
+      app: counter-backend
+    name: counter-backend
+    namespace: zlic-jruss1
+    resourceVersion: "582097775"
+    uid: b6e5c8f2-fb8d-4ec0-a9ff-319913e5c807
+  spec:
+    host: counter-backend-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
+    port:
+      targetPort: 8080-tcp
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: counter-backend
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2022-11-15T13:22:10Z"
+        status: "True"
+        type: Admitted
+      host: counter-backend-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
+      routerCanonicalHostname: router-default.apps.exoscale-ch-gva-2-0.appuio.cloud
+      routerName: default
+      wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"route.openshift.io/v1","kind":"Route","metadata":{"annotations":{},"labels":{"app":"counter-frontend"},"name":"counter-frontend","namespace":"zlic-jruss1"},"spec":{"port":{"targetPort":"3000-tcp"},"tls":{"insecureEdgeTerminationPolicy":"Redirect","termination":"edge"},"to":{"kind":"Service","name":"counter-frontend"}}}
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2022-11-15T13:21:42Z"
+    labels:
+      app: counter-frontend
+    name: counter-frontend
+    namespace: zlic-jruss1
+    resourceVersion: "582097177"
+    uid: 4f4e5cd1-a667-4658-a4f7-8e1557d54dd8
+  spec:
+    host: counter-frontend-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
+    port:
+      targetPort: 3000-tcp
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: counter-frontend
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2022-11-15T13:21:42Z"
+        status: "True"
+        type: Admitted
+      host: counter-frontend-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
+      routerCanonicalHostname: router-default.apps.exoscale-ch-gva-2-0.appuio.cloud
+      routerName: default
+      wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"route.openshift.io/v1","kind":"Route","metadata":{"annotations":{},"labels":{"app":"counter-postgresadmin"},"name":"counter-postgresadmin","namespace":"zlic-jruss1"},"spec":{"port":{"targetPort":"8080-tcp"},"tls":{"insecureEdgeTerminationPolicy":"Redirect","termination":"edge"},"to":{"kind":"Service","name":"counter-postgresadmin"}}}
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2022-11-15T14:52:41Z"
+    labels:
+      app: counter-postgresadmin
+    name: counter-postgresadmin
+    namespace: zlic-jruss1
+    resourceVersion: "582201718"
+    uid: 27f5d55d-9d18-4f53-822e-87ded59cfc9f
+  spec:
+    host: counter-postgresadmin-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
+    port:
+      targetPort: 8080-tcp
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: counter-postgresadmin
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2022-11-15T14:52:41Z"
+        status: "True"
+        type: Admitted
+      host: counter-postgresadmin-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
+      routerCanonicalHostname: router-default.apps.exoscale-ch-gva-2-0.appuio.cloud
+      routerName: default
+      wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"route.openshift.io/v1","kind":"Route","metadata":{"annotations":{},"labels":{"app":"html-page"},"name":"html-page","namespace":"zlic-jruss1"},"spec":{"port":{"targetPort":"8080-tcp"},"tls":{"insecureEdgeTerminationPolicy":"Redirect","termination":"edge"},"to":{"kind":"Service","name":"html-page"}}}
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2022-11-09T13:00:19Z"
+    labels:
+      app: html-page
+    name: html-page
+    namespace: zlic-jruss1
+    resourceVersion: "572146899"
+    uid: 69f80b79-08cc-4b58-b4c1-ee3b68fbc1d7
+  spec:
+    host: html-page-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
+    port:
+      targetPort: 8080-tcp
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: html-page
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2022-11-09T13:00:19Z"
+        status: "True"
+        type: Admitted
+      host: html-page-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
+      routerCanonicalHostname: router-default.apps.exoscale-ch-gva-2-0.appuio.cloud
+      routerName: default
+      wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"route.openshift.io/v1","kind":"Route","metadata":{"annotations":{},"labels":{"app":"quotes"},"name":"quotes","namespace":"zlic-jruss1"},"spec":{"port":{"targetPort":"10000-tcp"},"tls":{"insecureEdgeTerminationPolicy":"Redirect","termination":"edge"},"to":{"kind":"Service","name":"quotes"}}}
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2022-11-09T14:52:48Z"
+    labels:
+      app: quotes
+    name: quotes
+    namespace: zlic-jruss1
+    resourceVersion: "580380217"
+    uid: 92c65bd6-1505-4822-bceb-40ee267d5637
+  spec:
+    host: quotes-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
+    port:
+      targetPort: 10000-tcp
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: quotes
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2022-11-09T14:52:48Z"
+        status: "True"
+        type: Admitted
+      host: quotes-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
+      routerCanonicalHostname: router-default.apps.exoscale-ch-gva-2-0.appuio.cloud
+      routerName: default
+      wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"route.openshift.io/v1","kind":"Route","metadata":{"annotations":{},"labels":{"app":"quotesweb"},"name":"quotesweb","namespace":"zlic-jruss1"},"spec":{"port":{"targetPort":"3000-tcp"},"tls":{"insecureEdgeTerminationPolicy":"Redirect","termination":"edge"},"to":{"kind":"Service","name":"quotesweb"}}}
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2022-11-09T15:12:34Z"
+    labels:
+      app: quotesweb
+    name: quotesweb
+    namespace: zlic-jruss1
+    resourceVersion: "580372930"
+    uid: daf51fd1-04c7-4e22-bc1a-a94dc5c35c23
+  spec:
+    host: quotesweb-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
+    port:
+      targetPort: 3000-tcp
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: quotesweb
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2022-11-09T15:12:34Z"
+        status: "True"
+        type: Admitted
+      host: quotesweb-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud
+      routerCanonicalHostname: router-default.apps.exoscale-ch-gva-2-0.appuio.cloud
+      routerName: default
+      wildcardPolicy: None
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

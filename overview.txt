@@ -1,0 +1,64 @@
+NAME                                        READY   STATUS              RESTARTS   AGE
+pod/counter-backend-d978d4ff-f6gdl          1/1     Running             0          95m
+pod/counter-backend-d978d4ff-v6pfk          1/1     Running             0          94m
+pod/counter-database-6d89b78ff9-qp6v6       1/1     Running             0          4h25m
+pod/counter-frontend-d659b97fb-l89mr        1/1     Running             0          95m
+pod/counter-frontend-d659b97fb-lqlqt        1/1     Running             0          95m
+pod/counter-postgresadmin-b86574689-f9kpg   1/1     Running             0          4m40s
+pod/mysql-5c859c547b-h22hb                  1/1     Running             0          4h44m
+pod/mysql-7fcc7b6c5f-pcvnz                  0/1     ContainerCreating   0          4h40m
+pod/quotes-54d44c56d8-ln59p                 1/1     Running             0          4h40m
+pod/quotesweb-6bf56b6ff4-pbm24              1/1     Running             0          4h40m
+pod/quotesweb-6bf56b6ff4-prg74              1/1     Running             0          4h43m
+pod/quotesweb-6bf56b6ff4-rsdhp              1/1     Running             0          4h40m
+
+NAME                            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                       AGE
+service/counter-backend         ClusterIP   172.30.212.22    <none>        8080/TCP                      95m
+service/counter-database        ClusterIP   172.30.46.201    <none>        5432/TCP                      4h52m
+service/counter-frontend        ClusterIP   172.30.110.90    <none>        3000/TCP                      95m
+service/counter-postgresadmin   ClusterIP   172.30.20.244    <none>        8080/TCP                      4m41s
+service/html-page               ClusterIP   172.30.185.18    <none>        8080/TCP                      6d1h
+service/html-page-service       ClusterIP   172.30.213.211   <none>        8080/TCP                      6d2h
+service/mysql                   NodePort    172.30.199.61    <none>        3306:30282/TCP                23h
+service/quotes                  ClusterIP   172.30.88.110    <none>        10000/TCP,8443/TCP,8778/TCP   6d
+service/quotesweb               ClusterIP   172.30.138.44    <none>        3000/TCP                      5d23h
+
+NAME                                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/counter-backend         2/2     2            2           95m
+deployment.apps/counter-database        1/1     1            1           4h52m
+deployment.apps/counter-frontend        2/2     2            2           95m
+deployment.apps/counter-postgresadmin   1/1     1            1           4m42s
+deployment.apps/html-page-deployment    0/0     0            0           6d2h
+deployment.apps/mysql                   1/1     1            1           25h
+deployment.apps/quotes                  1/1     1            1           6d
+deployment.apps/quotesweb               3/3     3            3           5d23h
+
+NAME                                              DESIRED   CURRENT   READY   AGE
+replicaset.apps/counter-backend-d978d4ff          2         2         2       95m
+replicaset.apps/counter-database-5c55454487       0         0         0       4h52m
+replicaset.apps/counter-database-6d89b78ff9       1         1         1       4h25m
+replicaset.apps/counter-frontend-d659b97fb        2         2         2       95m
+replicaset.apps/counter-postgresadmin-b86574689   1         1         1       4m41s
+replicaset.apps/html-page-deployment-7585bc976    0         0         0       6d2h
+replicaset.apps/mysql-5c859c547b                  1         1         1       25h
+replicaset.apps/mysql-7fcc7b6c5f                  1         1         0       25h
+replicaset.apps/quotes-54d44c56d8                 1         1         1       23h
+replicaset.apps/quotes-59864c7bf4                 0         0         0       6d
+replicaset.apps/quotesweb-5f4dd7dcd7              0         0         0       25h
+replicaset.apps/quotesweb-66f7d67546              0         0         0       5d23h
+replicaset.apps/quotesweb-6bf56b6ff4              3         3         3       25h
+
+NAME                                                   REFERENCE                     TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/counter-backend    Deployment/counter-backend    0%/80%    2         2         2          95m
+horizontalpodautoscaler.autoscaling/counter-frontend   Deployment/counter-frontend   0%/80%    2         4         2          95m
+
+NAME                                      REVISION   DESIRED   CURRENT   TRIGGERED BY
+deploymentconfig.apps.openshift.io/qotd   0          1         0         config,image(qotd:latest)
+
+NAME                                             HOST/PORT                                                                 PATH   SERVICES                PORT        TERMINATION     WILDCARD
+route.route.openshift.io/counter-backend         counter-backend-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud                counter-backend         8080-tcp    edge/Redirect   None
+route.route.openshift.io/counter-frontend        counter-frontend-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud               counter-frontend        3000-tcp    edge/Redirect   None
+route.route.openshift.io/counter-postgresadmin   counter-postgresadmin-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud          counter-postgresadmin   8080-tcp    edge/Redirect   None
+route.route.openshift.io/html-page               html-page-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud                      html-page               8080-tcp    edge/Redirect   None
+route.route.openshift.io/quotes                  quotes-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud                         quotes                  10000-tcp   edge/Redirect   None
+route.route.openshift.io/quotesweb               quotesweb-zlic-jruss1.apps.exoscale-ch-gva-2-0.appuio.cloud                      quotesweb               3000-tcp    edge/Redirect   None
