@@ -1,6 +1,5 @@
 # Erstellen Sie ein Deployment mit dem Label app=counter-backend welches das erstellte Image (ghcr.io/jonathanxdr/counter-backend:v1) in einem Pod in Betrieb nimmt.
 # Das Deployment counter-backend darf dabei nicht mit Image-Tag latest laufen und soll auf dem NODE_ENV production laufen
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -88,4 +87,22 @@ spec:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
 ---
-
+# Erstellen Sie mindestens ein HorizontalPodAutoscaling mit dem Namen counter-backend mit den Werten maxReplicas=2 und minReplicas=2.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: counter-backend
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: counter-backend
+  minReplicas: 2
+  maxReplicas: 2
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80

@@ -2,7 +2,6 @@
 # Das Deployment muss die Konfiguration für die Backendverbindung beinhalten. Erstellen Sie dafür eine neue ConfigMap für den REACT_APP_BACKEND_URL und dem URL der Backends (siehe Route des Backends).
 # Das Deployment counter-frontend darf dabei nicht mit Image-Tag latest laufen und soll auf dem NODE_ENV production laufen
 # Erstellen Sie einen Service mit dem Namen counter-frontend.
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -71,3 +70,23 @@ spec:
   tls:
     insecureEdgeTerminationPolicy: Redirect
     termination: edge
+---
+# Erstellen Sie mindestens einen weiteren HPA mit dem Namen counter-frontend im Namespace mit den Werten maxReplicas=4 und minReplicas=2.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: counter-frontend
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: counter-frontend
+  minReplicas: 2
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
