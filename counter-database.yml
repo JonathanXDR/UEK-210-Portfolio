@@ -1,7 +1,6 @@
 # Erstellen Sie ein Secret mit dem Namen "counter-database", und den keys "database-name", "database-user" und "database-password".
 # Erstellen Sie eine Postgres-Datenbank mit einem Deployment.
 # Erstellen Sie einen Service, welcher als "counter-database" ansprechbar ist.
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
