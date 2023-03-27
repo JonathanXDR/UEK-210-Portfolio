@@ -15,7 +15,7 @@
     "dotenv": "^16.0.3",
     "epilogue": "^0.7.1",
     "express": "^4.18.1",
-    "nodemon": "^2.0.21",
+    "nodemon": "^2.0.22",
     "pg": "^8.10.0",
     "postgres": "^3.3.4",
     "sequelize": "^6.29.3",
