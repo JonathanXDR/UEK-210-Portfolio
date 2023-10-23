@@ -1,4 +1,4 @@
-FROM node:16.15.1-alpine
+FROM node:21.0.0-alpine
 
 ############################################
 # General Docker image configuration
